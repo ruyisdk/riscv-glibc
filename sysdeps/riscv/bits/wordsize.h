@@ -16,8 +16,10 @@
    License along with the GNU C Library.  If not, see
    <https://www.gnu.org/licenses/>.  */
 
-#if __riscv_xlen == (__SIZEOF_POINTER__ * 8)
-# define __WORDSIZE __riscv_xlen
+#if (__SIZEOF_POINTER__) == 4
+#define __WORDSIZE 32
+#elif (__SIZEOF_POINTER__) == 8
+#define __WORDSIZE 64
 #else
 # error unsupported ABI
 #endif

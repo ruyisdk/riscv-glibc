@@ -4,6 +4,7 @@
 case "$machine" in
 riscv*)
     xlen=`$CC $CFLAGS $CPPFLAGS -E -dM -xc /dev/null | sed -n 's/^#define __riscv_xlen \(.*\)/\1/p'`
+    abi_xlen=`$CC $CFLAGS $CPPFLAGS -E -dM -xc /dev/null | sed -n 's/^#define __SIZEOF_LONG__ \(.*\)/\1/p'`
     flen=`$CC $CFLAGS $CPPFLAGS -E -dM -xc /dev/null | sed -n 's/^#define __riscv_flen \(.*\)/\1/p'`
     float_abi=`$CC $CFLAGS $CPPFLAGS -E -dM -xc /dev/null | sed -n 's/^#define __riscv_float_abi_\([^ ]*\) .*/\1/p'`
     atomic=`$CC $CFLAGS $CPPFLAGS -E -dM -xc /dev/null | grep '#define __riscv_atomic' | cut -d' ' -f2`
@@ -13,6 +14,15 @@ riscv*)
 	;;
     *)
 	as_fn_error 1 "Unable to determine XLEN" "$LINENO" 5
+	;;
+    esac
+
+    case "$abi_xlen" in
+    4)
+    abi_xlen=32
+	;;
+    8)
+	abi_xlen=64
 	;;
     esac
 
@@ -56,10 +66,14 @@ riscv*)
     esac
 
     base_machine=riscv
-    machine=riscv/rv$xlen/$float_machine
+    machine=riscv/rv$abi_xlen/$float_machine
 
     cat >>confdefs.h <<_ACEOF
-#define RISCV_ABI_XLEN $xlen
+#define RISCV_ISA_XLEN $xlen
+_ACEOF
+
+    cat >>confdefs.h <<_ACEOF
+#define RISCV_ABI_XLEN $abi_xlen
 _ACEOF
 
     cat >>confdefs.h <<_ACEOF

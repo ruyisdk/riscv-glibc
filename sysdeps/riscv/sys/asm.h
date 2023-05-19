@@ -20,12 +20,12 @@
 #define _SYS_ASM_H
 
 /* Macros to handle different pointer/register sizes for 32/64-bit code.  */
-#if __riscv_xlen == 64
+#if (__SIZEOF_LONG__ * 8) == 64
 # define PTRLOG 3
 # define SZREG  8
 # define REG_S sd
 # define REG_L ld
-#elif __riscv_xlen == 32
+#elif (__SIZEOF_LONG__ * 8) == 32
 # define PTRLOG 2
 # define SZREG  4
 # define REG_S sw
