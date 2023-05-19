@@ -26,6 +26,12 @@
 #define ELF_NGREG	NGREG
 #define ELF_NFPREG	NFPREG
 
-typedef unsigned long int elf_greg_t;
-typedef unsigned long int elf_gregset_t[32];
-typedef union __riscv_mc_fp_state elf_fpregset_t;
+#if __riscv_xlen == 32
+   typedef unsigned long int elf_greg_t;
+   typedef unsigned long int elf_gregset_t[32];
+   typedef union __riscv_mc_fp_state elf_fpregset_t;
+#else
+   typedef unsigned long long int elf_greg_t;
+   typedef unsigned long long int elf_gregset_t[32];
+   typedef union __riscv_mc_fp_state elf_fpregset_t;
+#endif

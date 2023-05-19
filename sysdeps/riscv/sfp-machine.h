@@ -20,7 +20,7 @@
 #include <fenv.h>
 #include <fpu_control.h>
 
-#if __riscv_xlen == 32
+#if (__SIZEOF_LONG__ * 8) == 32
 
 # define _FP_W_TYPE_SIZE	32
 # define _FP_W_TYPE		unsigned long
